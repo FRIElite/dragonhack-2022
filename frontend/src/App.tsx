@@ -1,38 +1,34 @@
-import * as React from "react"
-import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
+import * as React from 'react';
+import { ChakraProvider, Box, theme, Flex } from '@chakra-ui/react';
+import { Navbar } from './components/Navbar';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { MapView } from './views/MapView';
+import { SignupView } from './views/LoginView';
+import { useAppStore } from './state/state';
 
-export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
-    </Box>
-  </ChakraProvider>
-)
+export const App = () => {
+  const user = useAppStore(state => state.user);
+  console.log({ user });
+
+  return (
+    <ChakraProvider theme={theme}>
+      <BrowserRouter>
+        <Flex direction="column" width="100%" height="100%" border="1px solid red">
+          {!user && <SignupView></SignupView>}
+          {user && (
+            <>
+              <Navbar></Navbar>
+              <Box flex="1" border="1px solid white">
+                <Routes>
+                  <Route path="/" element={<MapView />}>
+                    <Route path="/test" element={<MapView />} />
+                  </Route>
+                </Routes>
+              </Box>
+            </>
+          )}
+        </Flex>
+      </BrowserRouter>
+    </ChakraProvider>
+  );
+};
