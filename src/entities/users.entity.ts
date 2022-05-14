@@ -1,9 +1,21 @@
 import { IsNotEmpty } from 'class-validator';
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { User } from '@interfaces/users.interface';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Bike } from './bike.entity';
+import { Wallet } from './wallet.entity';
 
 @Entity()
-export class UserEntity extends BaseEntity implements User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -23,4 +35,11 @@ export class UserEntity extends BaseEntity implements User {
   @Column()
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToOne(() => Wallet)
+  @JoinColumn()
+  wallet: Wallet;
+
+  @OneToMany(() => Bike, bike => bike.owner)
+  bikes: Bike[];
 }

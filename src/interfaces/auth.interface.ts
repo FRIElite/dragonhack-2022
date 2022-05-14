@@ -1,5 +1,5 @@
+import { User } from '@/entities/users.entity';
 import { Request } from 'express';
-import { User } from '@interfaces/users.interface';
 
 export interface DataStoredInToken {
   id: number;
