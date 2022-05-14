@@ -9,7 +9,7 @@ class BikesController {
     try {
       const bikes: Bike[] = await this.bikeService.findAllBikes();
 
-      res.status(200).json({ data: bikes, message: 'findAll' });
+      res.status(200).json(bikes);
     } catch (error) {
       next(error);
     }

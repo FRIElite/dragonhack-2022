@@ -5,10 +5,11 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "start": "npm run build:tsc && cross-env NODE_ENV=production node dist/server.js",
+    "start": "npm run build:tsc && npm run build:frontend && cross-env NODE_ENV=production node dist/server.js",
     "dev": "cross-env NODE_ENV=development nodemon",
     "build": "swc src -d dist --source-maps --copy-files",
     "build:tsc": "tsc && tsc-alias",
+    "build:frontend": "cd frontend && npm run build && cd ..",
     "test": "jest --forceExit --detectOpenHandles",
     "lint": "eslint --ignore-path .gitignore --ext .ts src/",
     "lint:fix": "npm run lint -- --fix",
