@@ -7,7 +7,7 @@
   "scripts": {
     "start": "npm run build:tsc && npm run build:frontend && cross-env NODE_ENV=production node dist/server.js",
     "dev": "cross-env NODE_ENV=development nodemon",
-    "start:test": "cross-env NODE_ENV=test nodemon",
+    "start:prod": "cross-env NODE_ENV=production nodemon",
     "build": "npm run build:tsc",
     "build:tsc": "tsc && tsc-alias",
     "build:frontend": "cd frontend && npm run build && cd ..",
