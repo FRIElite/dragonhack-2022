@@ -13,7 +13,7 @@ import morgan from 'morgan';
 import 'reflect-metadata';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { createConnection } from 'typeorm';
+import { ConnectionOptions, createConnection } from 'typeorm';
 
 class App {
   public app: express.Application;
@@ -46,7 +46,8 @@ class App {
   }
 
   private connectToDatabase() {
-    createConnection(dbConnection);
+    console.log(dbConnection);
+    createConnection(dbConnection as ConnectionOptions);
   }
 
   private initializeMiddlewares() {
