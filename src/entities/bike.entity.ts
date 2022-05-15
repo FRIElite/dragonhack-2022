@@ -19,9 +19,11 @@ export class Bike extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @JoinColumn()
-  @OneToOne(() => Location)
-  location: Location;
+  @Column()
+  lat: number;
+
+  @Column()
+  lng: number;
 
   @ManyToOne(() => User, user => user.bikes)
   owner: User;
