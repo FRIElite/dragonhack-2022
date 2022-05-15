@@ -1,16 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  Unique,
-  UpdateDateColumn,
-} from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Bike } from './bike.entity';
 import { Wallet } from './wallet.entity';
 
@@ -21,7 +10,6 @@ export class User extends BaseEntity {
 
   @Column()
   @IsNotEmpty()
-  @Unique(['email'])
   email: string;
 
   @Column({ select: false })
@@ -43,4 +31,9 @@ export class User extends BaseEntity {
   @JoinColumn()
   @OneToMany(() => Bike, bike => bike.owner)
   bikes: Bike[];
+
+  @Column({
+    nullable: true,
+  })
+  activeBikeId: number;
 }

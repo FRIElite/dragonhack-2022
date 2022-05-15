@@ -99,30 +99,34 @@ class App {
       password: 'admin',
     });
 
+    const activeUser = await userService.createUser({
+      email: 'user@user',
+      password: 'user',
+    });
+
+    console.log(user, activeUser);
+
     const latLngFri = {
       lat: 46.050286,
       lng: 14.466815,
     };
-    const randomLatLng = Array(50)
+    const promises = Array(50)
       .fill({})
-      .map(e => ({
-        lat: latLngFri.lat + (Math.random() - 0.5) * 0.1,
-        lng: latLngFri.lng + (Math.random() - 0.5) * 0.1,
-      }));
+      .map(() =>
+        bikeService.createBike({
+          lat: latLngFri.lat + (Math.random() - 0.5) * 0.1,
+          lng: latLngFri.lng + (Math.random() - 0.5) * 0.1,
+          owner: user,
+          reservedTime: new Date(),
+          activeUserId: activeUser.id,
+          rate: 4.5,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          rides: [],
+        } as Bike),
+      );
 
-    for (const { lat, lng } of randomLatLng) {
-      bikeService.createBike({
-        lat,
-        lng,
-        owner: user,
-        reservedTime: new Date(),
-        activeUser: null,
-        rate: 4.5,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        rides: [],
-      } as Bike);
-    }
+    Promise.all(promises);
   }
 }
 

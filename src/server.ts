@@ -4,9 +4,10 @@ import IndexRoute from '@routes/index.route';
 import UsersRoute from '@routes/users.route';
 import validateEnv from '@utils/validateEnv';
 import BikesRoute from './routes/bikes.route';
+import RidesRoute from './routes/rides.route';
 
 validateEnv();
 
-const app = new App([new IndexRoute(), new UsersRoute(), new AuthRoute(), new BikesRoute()]);
+const app = new App([new IndexRoute(), new UsersRoute(), new AuthRoute(), new BikesRoute(), new RidesRoute()]);
 
 app.listen();

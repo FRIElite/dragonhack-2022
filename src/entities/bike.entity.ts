@@ -1,15 +1,4 @@
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Ride } from './ride.entity';
 import { User } from './users.entity';
 
@@ -31,9 +20,10 @@ export class Bike extends BaseEntity {
   @Column()
   reservedTime: Date;
 
-  @JoinColumn()
-  @OneToOne(() => User)
-  activeUser: User;
+  @Column({
+    nullable: true,
+  })
+  activeUserId: number;
 
   @Column({ type: 'float' })
   rate: number;
@@ -46,6 +36,7 @@ export class Bike extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @JoinColumn()
   @OneToMany(() => Ride, ride => ride.bike)
   rides: Ride[];
 }
