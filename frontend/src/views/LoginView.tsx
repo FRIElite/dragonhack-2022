@@ -1,11 +1,15 @@
 import { Button } from '@chakra-ui/button';
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
-import { Center, Flex, Heading } from '@chakra-ui/layout';
+import { Flex, Heading } from '@chakra-ui/layout';
 import React from 'react';
+import { signup } from '../services/auth.service';
+import { useAppStore } from '../state/state';
 
 export const SignupView: React.FC<any> = () => {
   console.log('Hahaha');
+
+  const setUser = useAppStore(state => state.setUser)
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -14,7 +18,12 @@ export const SignupView: React.FC<any> = () => {
     const email = elements['email'].value;
     const password = elements['password'].value;
 
-    console.log({ email, password });
+    signup({
+      email,
+      password
+    }).then(async res => {
+      setUser(await res.json())
+    })
   }
 
   return (

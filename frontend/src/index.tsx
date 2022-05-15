@@ -1,9 +1,9 @@
 import { ColorModeScript } from "@chakra-ui/react"
 import * as React from "react"
 import { App } from "./App"
+import "./index.css"
 import reportWebVitals from "./reportWebVitals"
 import * as serviceWorker from "./serviceWorker"
-import "./index.css";
 
 const container = document.getElementById("root")
 const root = require("react-dom/client").createRoot(container)

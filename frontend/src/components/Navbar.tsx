@@ -14,8 +14,14 @@ export const Navbar: React.FC<any> = () => {
 
   return (
     <>
-      <Flex width="100%" p={2} justify="space-between">
-        <IconButton aria-label="Open Manu" icon={<HamburgerIcon />} onClick={onOpen} />
+      <Flex width="100%" p={2} justify="space-between" style={{
+        // opacity: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.0)',
+        position: 'absolute',
+        top: 0,
+        zIndex: 10
+      }}>
+        <IconButton aria-label="Open Menu" icon={<HamburgerIcon />} onClick={onOpen} />
         <ColorModeSwitcher></ColorModeSwitcher>
       </Flex>
       <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
@@ -27,10 +33,10 @@ export const Navbar: React.FC<any> = () => {
           <DrawerBody>
             <List spacing={6}>
               <ListItem w="100%">
-                <NavbarLink to="/">Map</NavbarLink>
+                <NavbarLink to="/map">Map</NavbarLink>
               </ListItem>
               <ListItem w="100%">
-                <NavbarLink to="/">Map</NavbarLink>
+                <NavbarLink to="/bike-list">Bikes</NavbarLink>
               </ListItem>
             </List>
           </DrawerBody>
