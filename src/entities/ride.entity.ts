@@ -1,6 +1,5 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Bike } from './bike.entity';
-import { Location } from './location.entity';
 import { User } from './users.entity';
 
 @Entity()
@@ -12,21 +11,28 @@ export class Ride extends BaseEntity {
   @CreateDateColumn()
   startTime: Date;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   endTime: Date;
 
-  @JoinColumn()
-  @OneToOne(() => Location)
-  startLocation: Location;
+  @Column({ type: 'float' })
+  startLat: number;
 
-  @JoinColumn()
-  @OneToOne(() => Location)
-  endLocation: Location;
+  @Column({ type: 'float' })
+  startLng: number;
+
+  @Column({ type: 'float', nullable: true })
+  endLat: number;
+
+  @Column({ type: 'float', nullable: true })
+  endLng: number;
 
   @JoinColumn()
   @OneToOne(() => User)
   user: User;
 
+  @JoinColumn()
   @ManyToOne(() => Bike, bike => bike.rides)
   bike: Bike;
 }

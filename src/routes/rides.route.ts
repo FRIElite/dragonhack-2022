@@ -1,19 +1,20 @@
-import BikesController from '@/controllers/bikes.controller';
-import RidesService from '@/services/rides.service';
+import RidesController from '@/controllers/rides.controller';
 import { Routes } from '@interfaces/routes.interface';
 import { Router } from 'express';
 
 class RidesRoute implements Routes {
   public path = '/rides';
   public router = Router();
-  public ridesController = new RidesService();
+  public ridesController = new RidesController();
 
   constructor() {
     this.initializeRoutes();
   }
 
   private initializeRoutes() {
-    // this.router.get(`${this.path}`, this.ridesController.getBikes);
+    this.router.post(`${this.path}/start`, this.ridesController.startRide);
+    this.router.post(`${this.path}/end`, this.ridesController.endRide);
+    this.router.get(`${this.path}`, this.ridesController.getRides);
   }
 }
 
