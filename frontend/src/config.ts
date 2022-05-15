@@ -1,5 +1,5 @@
 export const devConfig = {
-    apiUrl: 'localhost:3000'
+    apiUrl: 'http://localhost:3001'
 }
 
 export const prodConfig = {
@@ -11,4 +11,4 @@ export const leonCongif = {
 }
 
 // export const apiUrl = (process.env.NODE_ENV === 'development' ? devConfig.apiUrl : prodConfig.apiUrl)
-export const { apiUrl } = leonCongif
+export const { apiUrl } = devConfig

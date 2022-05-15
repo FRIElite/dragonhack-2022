@@ -7,8 +7,6 @@ import { signup } from '../services/auth.service';
 import { useAppStore } from '../state/state';
 
 export const SignupView: React.FC<any> = () => {
-  console.log('Hahaha');
-
   const setUser = useAppStore(state => state.setUser)
 
   const handleSubmit = (e: any) => {

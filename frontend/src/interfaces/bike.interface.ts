@@ -15,6 +15,8 @@ export interface Bike  {
 
   rate: number;
 
+  rating: number;
+
   createdAt: Date;
 
   updatedAt: Date;

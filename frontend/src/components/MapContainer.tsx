@@ -1,18 +1,16 @@
-import { useColorMode } from '@chakra-ui/react';
+import { useColorMode, useColorModeValue } from '@chakra-ui/react';
 import { Status, Wrapper } from '@googlemaps/react-wrapper';
 import { isLatLngLiteral } from '@googlemaps/typescript-guards';
-import { AnyNsRecord } from 'dns';
 import { createCustomEqual } from 'fast-equals';
 import * as React from 'react';
 import { mapDarkStyles } from '../const';
 import { Bike } from '../interfaces/bike.interface';
-import { getBikes } from '../services/bikes.service';
 
 const render = (status: Status) => {
   return <h1>{status}</h1>;
 };
 
-export const MapContainer: React.VFC<{ markers: Bike[]; onMarkerClick? (bike: Bike) => void }> = ({ markers, onMarkerClick }) => {
+export const MapContainer: React.VFC<{ markers: Bike[]; onMarkerClick: (bike: Bike) => void }> = ({ markers, onMarkerClick }) => {
   const [clicks, setClicks] = React.useState<google.maps.LatLng[]>([]);
   const [zoom, setZoom] = React.useState(15); // initial zoom
   const [center, setCenter] = React.useState<google.maps.LatLngLiteral>({
@@ -20,6 +18,7 @@ export const MapContainer: React.VFC<{ markers: Bike[]; onMarkerClick? (bike: Bi
     lng: 14.466815,
   });
   const { colorMode } = useColorMode();
+  const iconUrl = useColorModeValue('./bikeDark.svg', './bikeLight.svg')
 
   const onClick = (e: google.maps.MapMouseEvent) => {
     setClicks([...clicks, e.latLng!]);
@@ -43,13 +42,17 @@ export const MapContainer: React.VFC<{ markers: Bike[]; onMarkerClick? (bike: Bi
           onIdle={onIdle}
           zoom={zoom}
           fullscreenControl={false}
+          streetViewControl={false}
+          zoomControl={false}
           mapTypeControl={false}
           controlSize={0}
           styles={getMapStyles() as any}
           style={{ flexGrow: '1', height: '100%' }}
         >
           {markers.map((latLng, i) => {
-            return <Marker key={i} position={latLng} onClick={() => onMarkerClick(latLng)} />;
+            return <Marker key={i} icon={{
+              url: iconUrl,
+            }} position={latLng} onClick={() => onMarkerClick(latLng)} />;
           })}
         </Map>
       </Wrapper>
@@ -94,9 +97,9 @@ const Map: React.FC<MapProps> = ({ onClick, onIdle, children, style, ...options 
     }
   }, [map, onClick, onIdle]);
 
-  React.useEffect(() => {
-    getBikes().then(bikes => console.log(bikes));
-  }, []);
+  // React.useEffect(() => {
+  //   getBikes().then(bikes => console.log(bikes));
+  // }, []);
 
   return (
     <>

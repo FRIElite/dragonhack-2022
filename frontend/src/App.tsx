@@ -1,6 +1,8 @@
-import { Box, ChakraProvider, Flex, theme } from '@chakra-ui/react';
+import { Box, Flex, Tab, TabList, Tabs, useColorModeValue } from '@chakra-ui/react';
+import { faList, faMap, faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { Bike } from './interfaces/bike.interface';
 import { getBikes } from './services/bikes.service';
@@ -12,46 +14,56 @@ import { ScannerView } from './views/ScannerView';
 export const App = () => {
   const user = useAppStore(state => state.user);
   const [bikes, setBikes] = React.useState<Bike[]>([])
-  console.log({ user });
-  console.log("env", process.env);
-  
+  const tabsColor = useColorModeValue('white', 'black')
 
   React.useEffect(() => {
-    // setBikes([
-    //   {
-    //     id: 1
-    //   } as Bike,
-    //   {
-    //     id: 2
-    //   } as Bike,
-    //   {
-    //     id: 3
-    //   } as Bike
-    // ])
-
     getBikes().then((bikes: Bike[] = []) => {
       setBikes(bikes)
     })
   }, [])
 
   return (
-    <ChakraProvider theme={theme}>
-      <BrowserRouter>
-        <Flex direction="column" width="100%" height="100%">
-          {/* {!user && <SignupView></SignupView>} */}
-          <Navbar></Navbar>
-          <Box flex="1" border="1px solid white">
-            <Routes>
-              <Route path="/" element={
-                <Navigate replace to="/map"/>
-              }></Route>
-              <Route path="map" element={<MapView bikes={bikes} />} />
-              <Route path="bike-list" element={<BikeListView bikes={bikes}/>} />
-              <Route path="scanner" element={<ScannerView />} />
-            </Routes>
-          </Box>
-        </Flex>
-      </BrowserRouter>
-    </ChakraProvider>
+    <BrowserRouter>
+      <Flex direction="column" width="100%" height="100%" overflowX={'hidden'}>
+        {/* {!user && <SignupView></SignupView>} */}
+        <Navbar></Navbar>
+        <Box flex="1">
+          <Routes>
+            <Route path="/" element={<Navigate replace to="/map"/>}></Route>
+            <Route path="map" element={<MapView bikes={bikes} />} />
+            <Route path="bike-list" element={<BikeListView bikes={bikes}/>} />
+            <Route path="scanner" element={<ScannerView />} />
+          </Routes>
+        </Box>
+        <Tabs defaultIndex={0} style={{
+          position: 'absolute',
+          bottom: 0,
+          width: '100%',
+          backgroundColor: tabsColor
+        }}>
+          <TabList sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-evenly',
+          }}>
+            <Link to="/map">
+              <Tab>
+                <FontAwesomeIcon size='2x' icon={faMap} />
+              </Tab>
+            </Link>
+            <Link to="/bike-list">
+              <Tab>
+                <FontAwesomeIcon size='2x' icon={faList} />
+              </Tab>
+            </Link>
+            <Link to="/scanner">
+              <Tab>
+                <FontAwesomeIcon size='2x' icon={faUser} />
+              </Tab>
+            </Link>
+          </TabList>
+        </Tabs>
+      </Flex>
+    </BrowserRouter>
   );
 };

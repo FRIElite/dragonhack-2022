@@ -28,6 +28,9 @@ export class Bike extends BaseEntity {
   @Column({ type: 'float' })
   rate: number;
 
+  @Column({ type: 'float' })
+  rating: number;
+
   @Column()
   @CreateDateColumn()
   createdAt: Date;
