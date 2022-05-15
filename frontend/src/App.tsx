@@ -3,30 +3,35 @@ import * as React from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { Bike } from './interfaces/bike.interface';
+import { getBikes } from './services/bikes.service';
 import { useAppStore } from './state/state';
 import { BikeListView } from './views/BikeListView';
 import { MapView } from './views/MapView';
+import { ScannerView } from './views/ScannerView';
 
 export const App = () => {
   const user = useAppStore(state => state.user);
   const [bikes, setBikes] = React.useState<Bike[]>([])
   console.log({ user });
+  console.log("env", process.env);
+  
 
   React.useEffect(() => {
-    setBikes([
-      {
-        id: 1
-      } as Bike,
-      {
-        id: 2
-      } as Bike,
-      {
-        id: 3
-      } as Bike
-    ])
-    // getBikes().then(bikes => {
-    //   setBikes(bikes)
-    // })
+    // setBikes([
+    //   {
+    //     id: 1
+    //   } as Bike,
+    //   {
+    //     id: 2
+    //   } as Bike,
+    //   {
+    //     id: 3
+    //   } as Bike
+    // ])
+
+    getBikes().then((bikes: Bike[] = []) => {
+      setBikes(bikes)
+    })
   }, [])
 
   return (
@@ -40,8 +45,9 @@ export const App = () => {
               <Route path="/" element={
                 <Navigate replace to="/map"/>
               }></Route>
-              <Route path="map" element={<MapView />} />
-              <Route path="bike-list" element={<BikeListView bikes={bikes as Bike[]}/>} />
+              <Route path="map" element={<MapView bikes={bikes} />} />
+              <Route path="bike-list" element={<BikeListView bikes={bikes}/>} />
+              <Route path="scanner" element={<ScannerView />} />
             </Routes>
           </Box>
         </Flex>

@@ -3,7 +3,9 @@ import { User } from "./user.interface";
 export interface Bike  {
   id: number;
 
-  location: Location;
+  lat: number;
+
+  lng: number;
 
   owner: User;
 

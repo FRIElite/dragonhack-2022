@@ -1,24 +1,25 @@
-
-import { useColorMode } from "@chakra-ui/react";
-import { Status, Wrapper } from "@googlemaps/react-wrapper";
-import { isLatLngLiteral } from "@googlemaps/typescript-guards";
-import { createCustomEqual } from "fast-equals";
-import * as React from "react";
-import { mapDarkStyles } from "../const";
-import { getBikes } from "../services/bikes.service";
+import { useColorMode } from '@chakra-ui/react';
+import { Status, Wrapper } from '@googlemaps/react-wrapper';
+import { isLatLngLiteral } from '@googlemaps/typescript-guards';
+import { AnyNsRecord } from 'dns';
+import { createCustomEqual } from 'fast-equals';
+import * as React from 'react';
+import { mapDarkStyles } from '../const';
+import { Bike } from '../interfaces/bike.interface';
+import { getBikes } from '../services/bikes.service';
 
 const render = (status: Status) => {
   return <h1>{status}</h1>;
 };
 
-export const MapContainer: React.VFC = () => {
+export const MapContainer: React.VFC<{ markers: Bike[]; onMarkerClick? (bike: Bike) => void }> = ({ markers, onMarkerClick }) => {
   const [clicks, setClicks] = React.useState<google.maps.LatLng[]>([]);
-  const [zoom, setZoom] = React.useState(3); // initial zoom
+  const [zoom, setZoom] = React.useState(15); // initial zoom
   const [center, setCenter] = React.useState<google.maps.LatLngLiteral>({
-    lat: 0,
-    lng: 0,
+    lat: 46.050286,
+    lng: 14.466815,
   });
-  const {colorMode} = useColorMode()
+  const { colorMode } = useColorMode();
 
   const onClick = (e: google.maps.MapMouseEvent) => {
     setClicks([...clicks, e.latLng!]);
@@ -29,12 +30,12 @@ export const MapContainer: React.VFC = () => {
     setCenter(m.getCenter()!.toJSON());
   };
 
-  function getMapStyles(){
-      return colorMode === 'dark' ? mapDarkStyles : undefined 
+  function getMapStyles() {
+    return colorMode === 'dark' ? mapDarkStyles : undefined;
   }
 
   return (
-    <div style={{ display: "flex", height: "100%" }}>
+    <div style={{ display: 'flex', height: '100%' }}>
       <Wrapper apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''} render={render}>
         <Map
           center={center}
@@ -45,11 +46,11 @@ export const MapContainer: React.VFC = () => {
           mapTypeControl={false}
           controlSize={0}
           styles={getMapStyles() as any}
-          style={{ flexGrow: "1", height: "100%" }}
+          style={{ flexGrow: '1', height: '100%' }}
         >
-          {clicks.map((latLng, i) => (
-            <Marker key={i} position={latLng} />
-          ))}
+          {markers.map((latLng, i) => {
+            return <Marker key={i} position={latLng} onClick={() => onMarkerClick(latLng)} />;
+          })}
         </Map>
       </Wrapper>
     </div>
@@ -61,13 +62,7 @@ interface MapProps extends google.maps.MapOptions {
   onIdle?: (map: google.maps.Map) => void;
 }
 
-const Map: React.FC<MapProps> = ({
-  onClick,
-  onIdle,
-  children,
-  style,
-  ...options
-}) => {
+const Map: React.FC<MapProps> = ({ onClick, onIdle, children, style, ...options }) => {
   const ref = React.useRef<HTMLDivElement>(null);
   const [map, setMap] = React.useState<google.maps.Map>();
 
@@ -87,28 +82,26 @@ const Map: React.FC<MapProps> = ({
 
   React.useEffect(() => {
     if (map) {
-      ["click", "idle"].forEach((eventName) =>
-        google.maps.event.clearListeners(map, eventName)
-      );
+      ['click', 'idle'].forEach(eventName => google.maps.event.clearListeners(map, eventName));
 
       if (onClick) {
-        map.addListener("click", onClick);
+        map.addListener('click', onClick);
       }
 
       if (onIdle) {
-        map.addListener("idle", () => onIdle(map));
+        map.addListener('idle', () => onIdle(map));
       }
     }
   }, [map, onClick, onIdle]);
 
   React.useEffect(() => {
-    getBikes().then(bikes => console.log(bikes))
-  }, [])
+    getBikes().then(bikes => console.log(bikes));
+  }, []);
 
   return (
     <>
       <div ref={ref} style={style} />
-      {React.Children.map(children, (child) => {
+      {React.Children.map(children, child => {
         if (React.isValidElement(child)) {
           // set the map prop on the child component
           return React.cloneElement(child, { map });
@@ -118,7 +111,7 @@ const Map: React.FC<MapProps> = ({
   );
 };
 
-const Marker: React.FC<google.maps.MarkerOptions> = (options) => {
+const Marker: React.FC<google.maps.MarkerOptions & { onClick: any }> = ({ onClick, ...options }) => {
   const [marker, setMarker] = React.useState<google.maps.Marker>();
 
   React.useEffect(() => {
@@ -137,29 +130,23 @@ const Marker: React.FC<google.maps.MarkerOptions> = (options) => {
   React.useEffect(() => {
     if (marker) {
       marker.setOptions(options);
+      marker.addListener('click', onClick);
     }
   }, [marker, options]);
 
   return null;
 };
 
-const deepCompareEqualsForMaps = createCustomEqual(
-  (deepEqual: any) => (a: any, b: any) => {
-    if (
-      isLatLngLiteral(a) ||
-      a instanceof google.maps.LatLng ||
-      isLatLngLiteral(b) ||
-      b instanceof google.maps.LatLng
-    ) {
-      return new google.maps.LatLng(a).equals(new google.maps.LatLng(b));
-    }
-
-    // TODO extend to other types
-
-    // use fast-equals for other objects
-    return deepEqual(a, b);
+const deepCompareEqualsForMaps = createCustomEqual((deepEqual: any) => (a: any, b: any) => {
+  if (isLatLngLiteral(a) || a instanceof google.maps.LatLng || isLatLngLiteral(b) || b instanceof google.maps.LatLng) {
+    return new google.maps.LatLng(a).equals(new google.maps.LatLng(b));
   }
-);
+
+  // TODO extend to other types
+
+  // use fast-equals for other objects
+  return deepEqual(a, b);
+});
 
 function useDeepCompareMemoize(value: any) {
   const ref = React.useRef();
@@ -171,10 +158,6 @@ function useDeepCompareMemoize(value: any) {
   return ref.current;
 }
 
-function useDeepCompareEffectForMaps(
-  callback: React.EffectCallback,
-  dependencies: any[]
-) {
+function useDeepCompareEffectForMaps(callback: React.EffectCallback, dependencies: any[]) {
   React.useEffect(callback, dependencies.map(useDeepCompareMemoize));
 }
-
