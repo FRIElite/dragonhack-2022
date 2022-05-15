@@ -1,7 +1,7 @@
 import { IconButton } from '@chakra-ui/button';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { HamburgerIcon } from '@chakra-ui/icons';
-import { Flex, List, ListItem } from '@chakra-ui/layout';
+import { Divider, Flex, Heading, List, ListItem, OrderedList } from '@chakra-ui/layout';
 import { Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay } from '@chakra-ui/modal';
 import React from 'react';
 import { Link, LinkProps } from 'react-router-dom';
@@ -38,7 +38,18 @@ export const Navbar: React.FC<any> = () => {
               <ListItem w="100%">
                 <NavbarLink to="/bike-list">Bikes</NavbarLink>
               </ListItem>
+              <ListItem w="100%">
+                <NavbarLink to="/profile">Profile</NavbarLink>
+              </ListItem>
             </List>
+            <Divider marginY={6} />
+            <Heading fontSize='3xl' marginBottom={4}>Leaderboard</Heading>
+            <OrderedList spacing={2}>
+              <ListItem fontWeight='bold'>Andraž Mesarič-Sirec (5.0)</ListItem>
+              <ListItem>Leon Modic (4.5)</ListItem>
+              <ListItem>Dejan Mandič (4.2)</ListItem>
+              <ListItem>Vasja Lev Kirn (2.1)</ListItem>
+            </OrderedList>
           </DrawerBody>
         </DrawerContent>
       </Drawer>

@@ -20,11 +20,11 @@ export function BikeListView({bikes}: {bikes: Bike[]}){
                 width={'90%'}
             />
             <Box marginBottom={'30px'}>
-                <Tag size='lg' variant='subtle' colorScheme='blue' marginRight={'20px'}>
+                <Tag size='md' variant='subtle' colorScheme='blue' marginRight={'20px'}>
                     <TagLabel>In radius: 2km</TagLabel>
                     <TagRightIcon boxSize='12px' as={CloseIcon}/>
                 </Tag>
-                <Tag size='lg' variant='subtle' colorScheme='blue'>
+                <Tag size='md' variant='subtle' colorScheme='blue'>
                     <TagLabel>User rating more than: 3.5</TagLabel>
                     <TagRightIcon boxSize='12px' as={CloseIcon}/>
                 </Tag>
