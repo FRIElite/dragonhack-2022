@@ -10,7 +10,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Location } from './location.entity';
 import { Ride } from './ride.entity';
 import { User } from './users.entity';
 
@@ -19,13 +18,14 @@ export class Bike extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'float' })
   lat: number;
 
-  @Column()
+  @Column({ type: 'float' })
   lng: number;
 
-  @ManyToOne(() => User, user => user.bikes)
+  @JoinColumn()
+  @ManyToOne(() => User, user => user.bikes, { eager: true })
   owner: User;
 
   @Column()
@@ -35,7 +35,7 @@ export class Bike extends BaseEntity {
   @OneToOne(() => User)
   activeUser: User;
 
-  @Column()
+  @Column({ type: 'float' })
   rate: number;
 
   @Column()

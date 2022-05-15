@@ -14,6 +14,9 @@ import 'reflect-metadata';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { ConnectionOptions, createConnection } from 'typeorm';
+import { Bike } from './entities/bike.entity';
+import BikeService from './services/bike.service';
+import UserService from './services/users.service';
 
 class App {
   public app: express.Application;
@@ -46,7 +49,7 @@ class App {
   }
 
   private connectToDatabase() {
-    createConnection(dbConnection as ConnectionOptions);
+    createConnection(dbConnection as ConnectionOptions).then(() => this.generateDummyData());
   }
 
   private initializeMiddlewares() {
@@ -85,6 +88,41 @@ class App {
 
   private initializeErrorHandling() {
     this.app.use(errorMiddleware);
+  }
+
+  private async generateDummyData() {
+    const bikeService = new BikeService();
+    const userService = new UserService();
+
+    const user = await userService.createUser({
+      email: 'admin@admin',
+      password: 'admin',
+    });
+
+    const latLngFri = {
+      lat: 46.050286,
+      lng: 14.466815,
+    };
+    const randomLatLng = Array(50)
+      .fill({})
+      .map(e => ({
+        lat: latLngFri.lat + (Math.random() - 0.5) * 0.1,
+        lng: latLngFri.lng + (Math.random() - 0.5) * 0.1,
+      }));
+
+    for (const { lat, lng } of randomLatLng) {
+      bikeService.createBike({
+        lat,
+        lng,
+        owner: user,
+        reservedTime: new Date(),
+        activeUser: null,
+        rate: 4.5,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        rides: [],
+      } as Bike);
+    }
   }
 }
 

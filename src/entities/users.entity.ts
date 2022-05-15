@@ -24,7 +24,7 @@ export class User extends BaseEntity {
   @Unique(['email'])
   email: string;
 
-  @Column()
+  @Column({ select: false })
   @IsNotEmpty()
   password: string;
 
@@ -36,10 +36,11 @@ export class User extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToOne(() => Wallet)
   @JoinColumn()
+  @OneToOne(() => Wallet)
   wallet: Wallet;
 
+  @JoinColumn()
   @OneToMany(() => Bike, bike => bike.owner)
   bikes: Bike[];
 }

@@ -10,8 +10,7 @@ class AuthController {
   public signUp = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userData: CreateUserDto = req.body;
-      console.log("userData", userData);
-      
+
       const signUpUserData: User = await this.authService.signup(userData);
 
       res.status(201).json(signUpUserData);
