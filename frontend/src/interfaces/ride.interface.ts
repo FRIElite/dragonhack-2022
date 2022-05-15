@@ -20,3 +20,14 @@ export interface Ride  {
 
   bike: Bike;
 }
+
+export interface StartRideDto {
+    bikeId: number;
+    userId: number | string;
+  }
+  
+  export interface EndRideDto {
+    rideId: number;
+    bikeId: number;
+  }
+  
