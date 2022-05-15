@@ -14,7 +14,7 @@ class AuthService extends Repository<User> {
     if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
 
     const findUser: User = await User.findOne({ where: { email: userData.email } });
-    if (findUser) throw new HttpException(409, `You're email ${userData.email} already exists`);
+    if (findUser) return findUser;
 
     const hashedPassword = await hash(userData.password, 10);
     const createUserData: User = await User.create({ ...userData, password: hashedPassword }).save();

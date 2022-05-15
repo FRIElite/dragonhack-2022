@@ -14,6 +14,8 @@ import 'reflect-metadata';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { createConnection } from 'typeorm';
+import UserService from '@services/users.service';
+import BikeService from '@services/bike.service';
 
 class App {
   public app: express.Application;
@@ -46,7 +48,29 @@ class App {
   }
 
   private connectToDatabase() {
-    createConnection(dbConnection);
+    createConnection(dbConnection).then(async () => {
+      const userService = new UserService();
+      const bikeService = new BikeService();
+
+      const user = await userService.create({ email: `test-${Math.random()}@yahoo.com`, password: `${Math.random()}`}).save()
+
+      const lat = 46.050286;
+      const lng = 14.466815;
+
+      Array(10).fill(0).forEach(() => {
+        bikeService.create({
+          lat: lat + (Math.random() / 10) * (Math.random() > 0.5 ? 1 : -1),
+          lng: lng + (Math.random() / 10) * (Math.random() > 0.5 ? 1 : -1),
+          owner: user,
+          reservedTime: null,
+          activeUser: null,
+          rate: Math.floor(Math.random() * 10),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          rides: []
+        })
+      })
+    });
   }
 
   private initializeMiddlewares() {
