@@ -1,13 +1,34 @@
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box } from '@chakra-ui/react';
+import { CloseIcon } from '@chakra-ui/icons';
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Input, Tag, TagLabel, TagRightIcon } from '@chakra-ui/react';
 import { faBicycle, faPersonBiking } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Bike } from "../interfaces/bike.interface";
 
 export function BikeListView({bikes}: {bikes: Bike[]}){
     return (
-        <>
-            <div style={{height: '56px'}}></div>
-            <Accordion>
+        <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+        }}>
+            <Input 
+                marginTop={'80px'} 
+                marginBottom={'20px'} 
+                placeholder='Search' 
+                size='md'
+                width={'90%'}
+            />
+            <Box marginBottom={'30px'}>
+                <Tag size='lg' variant='subtle' colorScheme='blue' marginRight={'20px'}>
+                    <TagLabel>In radius: 2km</TagLabel>
+                    <TagRightIcon boxSize='12px' as={CloseIcon}/>
+                </Tag>
+                <Tag size='lg' variant='subtle' colorScheme='blue'>
+                    <TagLabel>User rating more than: 3.5</TagLabel>
+                    <TagRightIcon boxSize='12px' as={CloseIcon}/>
+                </Tag>
+            </Box>
+            <Accordion width={'100%'}>
                 {
                     bikes.map(bike => {
                         return <AccordionItem key={bike.id}>
@@ -39,6 +60,6 @@ export function BikeListView({bikes}: {bikes: Bike[]}){
                     })
                 }
             </Accordion>
-        </>
+        </Box>
     )
 }

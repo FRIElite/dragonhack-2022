@@ -16,6 +16,7 @@ import swaggerUi from 'swagger-ui-express';
 import { ConnectionOptions, createConnection } from 'typeorm';
 import { Bike } from './entities/bike.entity';
 import BikeService from './services/bike.service';
+import RidesService from './services/rides.service';
 import UserService from './services/users.service';
 
 class App {
@@ -93,6 +94,7 @@ class App {
   private async generateDummyData() {
     const bikeService = new BikeService();
     const userService = new UserService();
+    const rideService = new RidesService();
 
     const user = await userService.createUser({
       email: 'admin@admin',
@@ -103,8 +105,6 @@ class App {
       email: 'user@user',
       password: 'user',
     });
-
-    console.log(user, activeUser);
 
     const latLngFri = {
       lat: 46.050286,
@@ -127,7 +127,10 @@ class App {
         } as Bike),
       );
 
-    Promise.all(promises);
+    await Promise.all(promises);
+
+    const bike = await bikeService.findBikeById(1);
+    rideService.startRide(bike, user);
   }
 }
 
