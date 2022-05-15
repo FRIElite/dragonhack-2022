@@ -117,7 +117,7 @@ class App {
           lat: latLngFri.lat + (Math.random() - 0.5) * 0.1,
           lng: latLngFri.lng + (Math.random() - 0.5) * 0.1,
           owner: user,
-          reservedTime: new Date(),
+          reservedTime: Math.random() > 0.5 ? null : new Date(),
           activeUserId: activeUser.id,
           rate: Math.random(),
           rating: Math.random() * 5,

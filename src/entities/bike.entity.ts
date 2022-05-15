@@ -17,7 +17,9 @@ export class Bike extends BaseEntity {
   @ManyToOne(() => User, user => user.bikes, { eager: true })
   owner: User;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   reservedTime: Date;
 
   @Column({

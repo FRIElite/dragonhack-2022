@@ -9,6 +9,7 @@ import { getBikes } from './services/bikes.service';
 import { useAppStore } from './state/state';
 import { BikeListView } from './views/BikeListView';
 import { MapView } from './views/MapView';
+import { ProfileView } from './views/ProfileView';
 import { ScannerView } from './views/ScannerView';
 
 export const App = () => {
@@ -33,6 +34,7 @@ export const App = () => {
             <Route path="map" element={<MapView bikes={bikes} />} />
             <Route path="bike-list" element={<BikeListView bikes={bikes}/>} />
             <Route path="scanner" element={<ScannerView />} />
+            <Route path="profile" element={<ProfileView />} />
           </Routes>
         </Box>
         <Tabs defaultIndex={0} style={{
@@ -56,7 +58,7 @@ export const App = () => {
                 <FontAwesomeIcon size='2x' icon={faList} />
               </Tab>
             </Link>
-            <Link to="/scanner">
+            <Link to="/profile">
               <Tab>
                 <FontAwesomeIcon size='2x' icon={faUser} />
               </Tab>
