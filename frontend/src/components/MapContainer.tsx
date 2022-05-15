@@ -51,7 +51,7 @@ export const MapContainer: React.VFC<{ markers: Bike[]; onMarkerClick: (bike: Bi
         >
           {markers.map((latLng, i) => {
             return <Marker key={i} icon={{
-              url: iconUrl,
+              url: latLng.reservedTime ? "./bikeRed.svg" : iconUrl,
             }} position={latLng} onClick={() => onMarkerClick(latLng)} />;
           })}
         </Map>
