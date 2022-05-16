@@ -23,4 +23,4 @@ export const remoteNgrokConfig = {
 }
 
 // export const apiUrl = (process.env.NODE_ENV === 'development' ? devConfig.apiUrl : prodConfig.apiUrl)
-export const { apiUrl } = remoteNgrokConfig
+export const { apiUrl } = devConfig
